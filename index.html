@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8">
+    <title>Football Game</title>
+    <link rel="stylesheet" href="style.css"> <!-- Підключення стилів -->
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>⚽ Football Game</h1>
+      <p>Оберіть одні з трьох воріт і зробіть удар!</p>
+
+      <div class="goal-container">
+        <button class="goal-btn" onclick="shoot(1)">🥅 Ворота 1</button>
+        <button class="goal-btn" onclick="shoot(2)">🥅 Ворота 2</button>
+        <button class="goal-btn" onclick="shoot(3)">🥅 Ворота 3</button>
+      </div>
+
+      <p id="result"></p>
+      <div id="image-container"></div>
+      <button class="btn reset" onclick="resetGame()">🔄 Новий удар</button>
+    </div>
+    
+    <script>
+      let savedGoal = getRandomGoal();
+      let container = document.getElementById('image-container');
+
+      function getRandomGoal() {
+        return Math.floor(Math.random() * 3) + 1;
+      }
+
+      function shoot(playerChoice) {
+        
+         container.innerHTML='';
+        if (playerChoice != savedGoal) {
+          document.getElementById("result").textContent = "❌ Воротар відбив удар!";
+          document.getElementById("result").style.color = "red";
+          // Додати картинку
+          let img = document.createElement('img');
+          img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQz2-wS5SRfz64GYXw6mfAfqeMix-WwZD_N9A&s';
+          img.alt = 'Опис зображення';
+          container.appendChild(img);
+        } else {
+          //document.getElementById("result").textContent = "⚽ ГОООЛ! Ти забив!";
+          document.getElementById("result").innerHTML = "<h1>⚽ ГОООЛ! Ти забив!</h1>";
+          document.getElementById("result").style.color = "green";
+          let img = document.createElement('img');
+          container.innerHTML='';
+          img.src = "https://novyny.live/cdn-cgi/imagedelivery/4_JwVYxosZqzJ7gIDJgTLA/a24f1660-f01d-40e5-69ab-dd6f48f13c00/mobile"
+          img.alt = 'Опис зображення';
+          container.appendChild(img);
+
+        }
+      }
+
+      function resetGame() {
+        savedGoal = getRandomGoal();
+        document.getElementById("result").textContent = "";
+        container.innerHTML='';
+      }
+    </script>
+
+  </body>
+</html>
