@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розумний квадрат</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <h1>Розумний квадрат</h1>
+    <p>Керуй квадратом: стрілки ← ↑ ↓ →, зміна розміру (+ / -), перетягування мишею.</p>
+    
+    <div id="container">
+        <div id="square"></div>
+    </div>
+
+    <div class="controls">
+        <!-- Змінити код аби кнопки нижче працювали через addEventListener -->
+        <button class="reset-btn" onclick="resetPosition()">Скинути положення</button>
+        <button class="color-btn" onclick="resetColor()">Скинути колір</button>
+    </div>
+
+    <script>
+        let square = document.getElementById("square");
+        let step = 10;
+        let sizeStep = 10;
+        let minSize = 50;
+        let maxSize = 200;
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        // Зміна кольору при кліку
+        square.addEventListener("click", function() {
+            // Додати реалізацію зміни кольору 
+            square.style.backgroundColor=getRandomColor();
+        });
+
+        // Рух стрілками
+        document.addEventListener("keydown", function(event) {
+            let topPos = parseInt(square.style.top) || 50;
+            let leftPos = parseInt(square.style.left) || 50;
+            let size = parseInt(square.style.width) || 100;
+
+            if (event.key === "ArrowUp") topPos = Math.max(topPos - step, 0);
+            if (event.key === "ArrowDown") topPos = Math.min(topPos + step, window.innerHeight - size);
+            if (event.key === "ArrowLeft") leftPos = Math.max(leftPos - step, 0);
+            if (event.key === "ArrowRight") leftPos = Math.min(leftPos + step, window.innerWidth - size);
+
+            if (event.key === "=") {
+                let newSize = Math.min(size + sizeStep, maxSize);
+                square.style.width = newSize + "px";
+                square.style.height = newSize + "px";
+            }
+            if (event.key === "-") {
+                let newSize = Math.max(size - sizeStep, minSize);
+                square.style.width = newSize + "px";
+                square.style.height = newSize + "px";
+            }
+
+            square.style.top = topPos + "px";
+            square.style.left = leftPos + "px";
+        });
+
+        function getRandomColor() {
+            // Генеруємо випадковий колір у форматі RGB
+            let red = Math.floor(Math.random() * 256);
+            let green = Math.floor(Math.random() * 256);
+            let blue = Math.floor(Math.random() * 256);
+            return `rgb(${red}, ${green}, ${blue})`;
+        }
+
+        // Перетягування мишею
+        square.addEventListener("mousedown", function(event) {
+            isDragging = true;
+            offsetX = event.clientX - square.getBoundingClientRect().left;
+            offsetY = event.clientY - square.getBoundingClientRect().top;
+            square.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", function(event) {
+            if (isDragging) {
+                let newX = event.clientX - offsetX;
+                let newY = event.clientY - offsetY;
+                square.style.left = newX + "px";
+                square.style.top = newY + "px";
+            }
+        });
+
+        document.addEventListener("mouseup", function() {
+            isDragging = false;
+            square.style.cursor = "grab";
+        });
+
+        // Додати функцію що робила б скидання положення
+        function resetPosition() {
+            square.style.left = 50 + "px";
+                square.style.top = 100 + "px";
+        }
+
+        // Додати функцію що робила скидання кольору
+        function resetColor() {
+            square.style.backgroundColor="blue";
+        }
+    </script>
+
+</body>
+</html>
